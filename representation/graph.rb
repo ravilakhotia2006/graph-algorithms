@@ -18,6 +18,8 @@ class Graph
       @vertices << edge.from if !vertex_exist?(edge.from)
       @vertices << edge.to if !vertex_exist?(edge.to)
     end
+
+    build_adjacency_matrix.to_a
   end
 
   def adjacency_matrix
@@ -26,6 +28,8 @@ class Graph
 
   def adjacency_matrix= array_matrix
     @adjacency_matrix = Matrix.rows(array_matrix) if array_matrix.class.eql?(Array)
+
+    build_edges
   end
 
   def dag?
@@ -46,8 +50,41 @@ class Graph
   def directed?
   end
 
+  def vertex_count
+    @vertices.length
+  end
+
+  def edge_count
+    @edges.length
+  end
+
   private
     def vertex_exist? vertex
       @vertices.map { |vertex| vertex.name }.include?(vertex.name)
     end
+
+    def build_adjacency_matrix
+      arr = Array.new(vertex_count) { Array.new(vertex_count, 0) }
+
+      vertex_names = @vertices.map { |vertex| vertex.name }
+
+      edges.each do  |edge|
+        if edge.weight > 0
+          arr[vertex_names.index(edge.from.name)][vertex_names.index(edge.to.name)] = edge.weight
+        else
+          arr[vertex_names.index(edge.from.name)][vertex_names.index(edge.to.name)] = 1
+        end
+      end
+
+      count = vertex_count
+      count.times do |index|
+        arr[index][index] = 1
+      end
+
+      @adjacency_matrix = Matrix.rows(arr)
+    end
+
+  def build_edges
+
+  end
 end
