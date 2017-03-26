@@ -3,11 +3,12 @@ require_relative '../representation/edge'
 require_relative '../representation/vertex'
 
 class Graph
-  attr_accessor :edges, :vertices, :adjacency_matrix
+  attr_accessor :edges, :vertices, :adjacency_matrix, :directed
 
-  def initialize
+  def initialize(directed: false)
     @edges = []
     @vertices = []
+    @directed = directed
   end
 
   # TODO: validation needed if edge is already present or not
@@ -35,7 +36,10 @@ class Graph
   def dag?
   end
 
+  # a cyclic graph or circular graph is a graph that consists of a single cycle,
+  # or in other words, some number of vertices connected in a closed chain
   def cyclic?
+
   end
 
   def tree?
@@ -59,7 +63,7 @@ class Graph
   end
 
   private
-    def vertex_exist? vertex
+    def vertex_exist?(vertex)
       @vertices.map { |vertex| vertex.name }.include?(vertex.name)
     end
 
@@ -71,8 +75,10 @@ class Graph
       edges.each do  |edge|
         if edge.weight > 0
           arr[vertex_names.index(edge.from.name)][vertex_names.index(edge.to.name)] = edge.weight
+          arr[vertex_names.index(edge.to.name)][vertex_names.index(edge.from.name)] = edge.weight if !@directed
         else
           arr[vertex_names.index(edge.from.name)][vertex_names.index(edge.to.name)] = 1
+          arr[vertex_names.index(edge.to.name)][vertex_names.index(edge.from.name)] = 1 if !@directed
         end
       end
 
