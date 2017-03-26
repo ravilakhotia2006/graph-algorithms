@@ -1,8 +1,24 @@
 require 'matrix'
+require_relative '../representation/edge'
+require_relative '../representation/vertex'
 
 class Graph
+  attr_accessor :edges, :vertices, :adjacency_matrix
 
-  attr_accessor :adjacency_matrix
+  def initialize
+    @edges = []
+    @vertices = []
+  end
+
+  # TODO: validation needed if edge is already present or not
+  def add_edges(edges)
+    edges.each do |edge|
+      @edges << edge if !@edges.include?(edge)
+
+      @vertices << edge.from if !vertex_exist?(edge.from)
+      @vertices << edge.to if !vertex_exist?(edge.to)
+    end
+  end
 
   def adjacency_matrix
     @adjacency_matrix.to_a
@@ -29,4 +45,9 @@ class Graph
 
   def directed?
   end
+
+  private
+    def vertex_exist? vertex
+      @vertices.map { |vertex| vertex.name }.include?(vertex.name)
+    end
 end
