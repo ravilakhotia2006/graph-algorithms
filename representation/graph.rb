@@ -34,24 +34,29 @@ class Graph
   end
 
   def dag?
+    raise NotImplementedError
   end
 
   # a cyclic graph or circular graph is a graph that consists of a single cycle,
   # or in other words, some number of vertices connected in a closed chain
   def cyclic?
-
+    raise NotImplementedError
   end
 
   def tree?
+    raise NotImplementedError
   end
 
   def connected?
+    raise NotImplementedError
   end
 
   def complete?
+    raise NotImplementedError
   end
 
   def directed?
+    @directed
   end
 
   def vertex_count
@@ -91,6 +96,5 @@ class Graph
     end
 
   def build_edges
-
   end
 end
