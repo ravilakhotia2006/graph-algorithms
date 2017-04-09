@@ -14,10 +14,15 @@ class Graph
   # TODO: validation needed if edge is already present or not
   def add_edges(edges)
     edges.each do |edge|
-      @edges << edge if !@edges.include?(edge)
+      if !@edges.include?(edge)
+        @edges << edge
 
-      @vertices << edge.from if !vertex_exist?(edge.from)
-      @vertices << edge.to if !vertex_exist?(edge.to)
+        edge.from.neighbours.push(edge.to) if !edge.from.neighbours.include? edge.to
+        edge.to.neighbours.push(edge.from) if !edge.to.neighbours.include? edge.from
+
+        @vertices << edge.from if !vertex_exist?(edge.from)
+        @vertices << edge.to if !vertex_exist?(edge.to)
+      end
     end
 
     build_adjacency_matrix.to_a
@@ -95,6 +100,6 @@ class Graph
       @adjacency_matrix = Matrix.rows(arr)
     end
 
-  def build_edges
-  end
+    def build_edges
+    end
 end
